@@ -33,6 +33,7 @@ from joblib import load, dump
 verbose = True
 
 class QWorld():
+    # Transferred
     def __init__(self):
         # 4 actions
         # 0 - Left, 1 - Down, 2 - Right, 3 - Up
@@ -80,6 +81,7 @@ class QWorld():
                      self.epsilon_decay, self.epsilon_min, self.is_explore] = load(joblib_file)
         #f.close()
 
+    # Transferred
     # start of episode
     def reset(self):
         self.state = 0
@@ -89,6 +91,7 @@ class QWorld():
     def is_in_win_state(self):
         return self.state == 10
 
+    # Transferred
     def init_reward_table(self):
         """
         0 - Left, 1 - Down, 2 - Right, 3 - Up
@@ -122,7 +125,7 @@ class QWorld():
         self.reward_table[14,3] = 100.
         self.reward_table[14,2] = -100.
 
-
+    # Transferred
     def init_transition_table(self):
         """ TT[state_{i},action] = state_{i+1}
         0 - Left, 1 - Down, 2 - Right, 3 - Up
@@ -164,6 +167,7 @@ class QWorld():
 
         self.transition_table = T
 
+    # Transferred
     # execute the action on the environment
     def step(self, action, verbose=False):
         if verbose:
@@ -183,6 +187,7 @@ class QWorld():
 
         return next_state, reward, done
 
+    # Transferred
     # determine the next action
     def act(self):
         # 0 - Left, 1 - Down, 2 - Right, 3 - Up
