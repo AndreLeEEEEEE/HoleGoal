@@ -199,9 +199,8 @@ class HoleGoalEnv(gym.Env):
     [self.col, self.row, self.q_table, self.gamma, self.epsilon,
       self.epsilon_decay, self.epsilon_min, self.is_explore] = load(joblib_file)
   
-  # COME BACK TO LATER
   def render(self, mode='human', close=False):
-    if self.render_mode == "rgb_array":
+    if self.render_mode == "human":
       return self._render_frame()
     
   def state_coord(self, state):
@@ -300,4 +299,5 @@ class HoleGoalEnv(gym.Env):
     #sys.exit("print_world")
     
   def close(self):
+    # This happens automatically when the program exits
     ...

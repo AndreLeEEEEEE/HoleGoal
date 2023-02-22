@@ -82,6 +82,7 @@ def main():
             next_state = packed_next_state["agent"]
             hg_env.update_q_table(state, action, reward, next_state)
             print_status(hg_env, action, done, step, delay=delay,training_mode=training_flag)
+            hg_env.render()
             # Update state
             state = next_state
             # Check if the episode terminated
