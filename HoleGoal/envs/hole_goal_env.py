@@ -11,9 +11,11 @@ class HoleGoalEnv(gym.Env):
   def __init__(self, render_mode=None):
     # 4 actions
     # 0 - Left, 1 - Down, 2 - Right, 3 - Up
+    self.col = 4
     self.action_space = spaces.Discrete(4)
 
     # 16 states, 4x4 grid
+    self.row = 16
     self.observation_space = spaces.Dict(
       {
         "agent": spaces.Box(0, 3, shape=(2,), dtype=int),
@@ -23,7 +25,7 @@ class HoleGoalEnv(gym.Env):
 
     # setup the environment
     # Remember that the Q-table is supposed to be large
-    self.q_table = np.zeros([16, 4])
+    self.q_table = np.zeros([self.row, self.col])
     # The tables created and initialized here are now class attributes
     self.init_transition_table()
     self.init_reward_table()
@@ -157,7 +159,7 @@ class HoleGoalEnv(gym.Env):
     # the enviroment is now in new state
     self.state = next_state
 
-    return next_state, reward, done
+    return {"agent": next_state, "target": None}, reward, done, False, {}
   
   # agent wins when the goal is reached
   def is_in_win_state(self):
@@ -197,6 +199,7 @@ class HoleGoalEnv(gym.Env):
     [self.col, self.row, self.q_table, self.gamma, self.epsilon,
       self.epsilon_decay, self.epsilon_min, self.is_explore] = load(joblib_file)
   
+  # COME BACK TO LATER
   def render(self, mode='human', close=False):
     if self.render_mode == "rgb_array":
       return self._render_frame()
@@ -253,24 +256,24 @@ class HoleGoalEnv(gym.Env):
         color_goal = 'green'
         H_G_flag = False
         r,c = self.state_coord(self.state)
-      if (r,c) in [(row,i)]:
-        marker = '_'
-        color_goal = 'red'
-        H_G_flag = True
-      elif (i,row) in [(10,1),(6,2),(14,3)]:
-        marker = 'H' #hole state
-        H_G_flag = True
-      elif (i,row) in [(10,2)]:
-          marker = 'G' #goal state
+        if (r,c) in [(row,i)]:
+          marker = '_'
+          color_goal = 'red'
           H_G_flag = True
+        elif (i,row) in [(10,1),(6,2),(14,3)]:
+          marker = 'H' #hole state
+          H_G_flag = True
+        elif (i,row) in [(10,2)]:
+            marker = 'G' #goal state
+            H_G_flag = True
 
-      if i in [1,3,5,7,9,11,13,15] and H_G_flag==False: #none of the above gets printed
-        marker = ' ' #if (self.state, row,j) in cell else ' '
-      elif i in [2,6,10,14] and H_G_flag==False:
-        marker = ' '
-      elif H_G_flag==False:
-        marker = ''
-      print(colored(marker, color_goal), end='')
+        if i in [1,3,5,7,9,11,13,15] and H_G_flag==False: #none of the above gets printed
+          marker = ' ' #if (self.state, row,j) in cell else ' '
+        elif i in [2,6,10,14] and H_G_flag==False:
+          marker = ' '
+        elif H_G_flag==False:
+          marker = ''
+        print(colored(marker, color_goal), end='')
 
       if i % 4 == 0: #every 4 col, close the cell with a boundary
         print('|', end='')

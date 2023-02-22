@@ -1,4 +1,5 @@
 # This is the driver program
+
 import gym
 # The name of this module comes from setup.py
 import HoleGoal
@@ -21,9 +22,8 @@ def print_episode(episode, delay=1):
     print("")
     time.sleep(delay)
 
-
 # UI to display the world, delay of 1 sec for ease of understanding
-def print_status(hg_env, action, done, step, delay=1,training_mode=True):
+def print_status(hg_env, action, done, step, delay=1, training_mode=True):
     os.system('cls')
     hg_env.print_world(action, step)
     if training_mode: hg_env.print_q_table()
@@ -58,7 +58,6 @@ def main():
 
     # The name of this environment comes from HoleGoal/__init__.py
     hg_env = gym.make('hole-goal-v0', render_mode='human')
-    hg_env.__init__()
 
     if training_flag == False:
         #Load pre-existing Q-table
@@ -78,7 +77,9 @@ def main():
             # Use the policy to get the next action
             action = hg_env.act()
             # Apply the action to the current state
-            next_state, reward, done = hg_env.step(action)
+            packed_next_state, reward, done, truncated, info = hg_env.step(action)
+            # The next_state had to be returned as a dictionary, but needs to be an int for later use
+            next_state = packed_next_state["agent"]
             hg_env.update_q_table(state, action, reward, next_state)
             print_status(hg_env, action, done, step, delay=delay,training_mode=training_flag)
             # Update state
