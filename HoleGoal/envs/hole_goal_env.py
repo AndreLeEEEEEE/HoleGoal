@@ -200,8 +200,8 @@ class HoleGoalEnv(gym.Env):
       self.epsilon_decay, self.epsilon_min, self.is_explore] = load(joblib_file)
   
   def render(self, mode='human', close=False):
-    if self.render_mode == "human":
-      return self._render_frame()
+    # The model is already printed in the terminal
+    ...
     
   def state_coord(self, state):
     return (state//4, 2+4*(state%4))

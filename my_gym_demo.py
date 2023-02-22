@@ -1,3 +1,4 @@
+#!/Users/andrele/RL/HoleGoal/env/bin/ipython3
 # This is the driver program
 
 import gym
@@ -12,7 +13,9 @@ import time
 
 # UI to display episode count
 def print_episode(episode, delay=1):
-    os.system('cls')
+    # 'cls' for windows, 'clear' for mac/linux
+    if os.system('cls') != 0:
+        os.system('clear')
     for _ in range(17):
         print('=', end='')
     print("")
@@ -24,7 +27,8 @@ def print_episode(episode, delay=1):
 
 # UI to display the world, delay of 1 sec for ease of understanding
 def print_status(hg_env, action, done, step, delay=1, training_mode=True):
-    os.system('cls')
+    if os.system('cls') != 0:
+        os.system('clear')
     hg_env.print_world(action, step)
     if training_mode: hg_env.print_q_table()
     if done:
